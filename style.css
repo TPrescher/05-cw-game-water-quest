@@ -1,143 +1,163 @@
-/* Charity: water Brand Colors & Fonts
-
-Primary Colors:
-- Yellow:     #FFC907
-- Blue:       #2E9DF7
-
-Secondary Colors:
-- Light Blue: #8BD1CB
-- Green:      #4FCB53
-- Orange:     #FF902A
-- Red:        #F5402C
-- Dark Green: #159A48
-- Pink:       #F16061
-
-Fonts:
-- Proxima Nova
-- Avenir
-
-*/
-
+/* Charity: water Brand Colors */
+:root {
+  --cw-yellow: #FFC72C;
+  --cw-blue: #00AEEF;
+  --cw-bg: #f7fbfd;
+  --cw-dark: #222;
+  --cw-white: #fff;
+  --cw-shadow: 0 4px 16px rgba(0,174,239,0.08);
+}
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+/* Fonts */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 30px;
-  background-color: #f0f0f0;
-  color: #333;
-}
-
-.container {
-  max-width: 750px;
-  margin: 50px auto;
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-h1 img {
-  height: 50px;
-  margin-right: 15px;
-  display: block;
-}
-
-.game-instructions {
-  font-size: 18px;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.stats {
+  font-family: Avenir, sans-serif;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f7fbfd;
+}
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  background: #f7fafd;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 16px 0 8px 0;
+  font-size: 1.2em;
+  align-items: center;
   margin-bottom: 30px;
-  background-color: #f5f5f5;
-  padding: 15px 0;
-  border-radius: 8px;
 }
 
-.stats p {
-  margin: 0;
-  font-size: 18px;
+.drops {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: bold;
-  color: #333;
+  color: #159a48;
 }
-
-.game-grid {
+.drops img {
+  width: 28px;
+  height: 28px;
+  margin-right: 2px;
+}
+.grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin: 0 auto;
-  max-width: 500px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0; /* Ensure tiles are touching */
+  justify-content: center;
+  align-content: center;
+  margin: 40px auto;
+  background: #e3f2fd;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,174,239,0.08);
+  width: 246px;
+  height: 246px;
 }
-
-.grid-cell {
-  background-color: #e8e8e8;
-  border-radius: 8px;
-  aspect-ratio: 1;
+.tile {
+  background: #fff;
+  border: 2px solid #00AEEF;
+  border-radius: 0; /* Remove rounded corners */
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 2rem;
+  color: #00AEEF;
   cursor: pointer;
-  transition: background-color 0.3s;
-  position: relative;
-  overflow: hidden;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  user-select: none;
 }
-
-.water-can-wrapper {
-  position: absolute;
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.15s;
+  pointer-events: none;
+}
+.tile.blocked {
+  background: #d9bdbd;
+  cursor: not-allowed;
+}
+.tile.terrain {
+  background: #e2eed6;
+  cursor: default;
+}
+.tile.fixed {
+  background: #FFC72C;
+  color: #fff;
+  border-color: #FFC72C;
+  cursor: default;
+}
+.tile:active {
+  background: #e0f7fa;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+  margin-top: 40px;
+}
+button {
+  font-size: 1.1em;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #2e9df7;
+  color: #fff;
+  border: none;
+  margin: 0 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transition: background 0.18s;
+}
+button:disabled {
+  background: #aacde8;
+  cursor: not-allowed;
+}
+.popup {
+  display: none;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70px;
-  height: 70px;
-  /* Ensure the wrapper is properly centered */
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 0 24px rgba(0,0,0,0.21);
+  padding: 30px 30px 22px 30px;
+  text-align: center;
+  z-index: 9999;
+  width: 360px;
 }
-
-.water-can {
-  width: 100%;
-  height: 100%;
-  background-image: url('img/water-can.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-  border-radius: 50%;
-  animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
-  transform-origin: center; /* Ensure scaling happens from the center */
+.popup h2 {
+  margin-top: 0;
+  color: #159a48;
 }
-
-@keyframes popUp {
-  0% {
-    transform: scale(0.5); /* Start scaling from the center */
-  }
-  100% {
-    transform: scale(1); /* End scaling at full size */
-  }
+.popup p {
+  margin: 12px 0 14px 0;
+  color: #444;
+  font-size: 1.1em;
 }
-
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: block;
-  margin: 30px auto 0;
-  transition: background-color 0.2s;
+.popup .score {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #2e9df7;
+  margin: 18px 0 6px 0;
+}
+.popup button {
+  margin-top: 14px;
+  background: #ffc907;
+  color: #000;
+  box-shadow: none;
+  font-weight: bold;
 }

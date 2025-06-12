@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Water Quest</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=600, initial-scale=1.0">
+  <title>Clean Water Quest – Playable Prototype</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Water Quest</h1>
-    <p class="game-instructions">Collect 20 items to complete the game!</p>
-    <div class="stats">
-      <p>Cans Collected: <span id="current-cans">0</span></p>
-      <p>Time Left: <span id="timer">30</span>s</p>
-    </div>
-    <div id="achievements" class="achievement"></div>
-    <div class="game-grid"></div>
-    <button id="start-game">Start Game</button>
+  <h1 style="margin-top: 18px; margin-bottom: 2px;">The Clean Water Quest</h1>
+  <h2 style="margin-bottom: 0; font-size: 1.4em; color: #159a48;">Flow to Thrive</h2>
+  <div class="hud">
+    <span>Level: <span id="levelNum">1</span></span>
+    <span>Score: <span id="score">0</span></span>
+    <span class="drops"><img src="assets/river_tiles/river_straight_horizontal.png" alt="water drop" style="width:20px;height:20px;"> <span id="drops">15</span></span>
+    <span>Moves: <span id="moves">0</span></span>
+  </div>
+  <div class="grid" id="gameGrid"></div>
+  <div class="controls">
+    <button onclick="restartGame()">Restart</button>
+    <button id="submitBtn" onclick="submitFlow()">Submit Flow</button>
+  </div>
+  <div class="popup" id="winPopup">
+    <h2>WELL DONE!</h2>
+    <p>You brought clean water to the village!<br><span class="score">+100</span></p>
+    <p><i>Did you know?</i><br>More than 700 million people worldwide lack access to clean water.</p>
+    <button onclick="closePopup()">Close</button>
   </div>
   <script src="script.js"></script>
 </body>
