@@ -1,11 +1,7 @@
 /* Charity: water Brand Colors */
 :root {
-  --cw-yellow: #FFC72C;
-  --cw-blue: #00AEEF;
-  --cw-bg: #f7fbfd;
-  --cw-dark: #222;
-  --cw-white: #fff;
-  --cw-shadow: 0 4px 16px rgba(0,174,239,0.08);
+  --cw-yellow: #FFC72C; /* Charity: Water Brand Yellow */
+  --cw-blue-light: #E3F2FD; /* Charity: Water Light Blue */
 }
 * {
   box-sizing: border-box;
@@ -22,20 +18,28 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 20px;
-  background-color: var(--cw-blue); /* Set the background to cw-blue */
+  background-color: var(--cw-blue-light); /* Set the background to light blue */
   color: #003366; /* Set dark blue for all main text and UI elements */
+  position: relative;
+  padding-bottom: 100px; /* Adjust for footer height */
 }
+
+/* HUD Styling */
 .hud {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  background: #f7fafd;
-  border-radius: 0 0 18px 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 16px 0 8px 0;
-  font-size: 1.2em;
+  justify-content: space-around;
   align-items: center;
-  margin-bottom: 30px;
+  background: #f7fafd;
+  padding: 10px;
+  font-family: 'Proxima Nova', 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #003366;
+  border-bottom: 2px solid #003366;
+}
+.hud div {
+  flex: 1;
+  text-align: center;
 }
 
 .drops {
@@ -52,8 +56,8 @@ body {
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* Change to 5 columns */
+  grid-template-rows: repeat(3, 1fr); /* Change to 3 rows */
   gap: 0; /* Ensure tiles are touching */
   justify-content: center;
   align-content: center;
@@ -61,8 +65,9 @@ body {
   background: #e3f2fd;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0,174,239,0.08);
-  width: 400px;
-  height: 400px;
+  width: 500px; /* Adjust width for 5 columns */
+  height: 300px; /* Adjust height for 3 rows */
+  overflow: hidden; /* Prevent extra tiles */
 }
 .tile {
   background: #fff;
@@ -133,7 +138,7 @@ button:disabled {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
+  background: var(--cw-yellow); /* Use Charity: Water Brand Yellow */
   border-radius: 18px;
   box-shadow: 0 0 24px rgba(0,0,0,0.21);
   padding: 30px 30px 22px 30px;
@@ -163,4 +168,332 @@ button:disabled {
   color: #000;
   box-shadow: none;
   font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #003366;
+  cursor: pointer;
+}
+
+/* Modal Popup Styling */
+.modal {
+  display: none;
+  position: absolute;
+  top: calc(100px + 20px); /* Adjust to place below the restart button */
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  display: flex;
+  gap: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  max-width: 600px;
+  width: 90%;
+}
+.modal-left {
+  flex: 1;
+  background: var(--cw-yellow);
+  color: #003366;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+.modal-left h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.modal-left .image-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #e0e0e0;
+  margin: 16px auto;
+}
+.modal-left .social-buttons button {
+  margin: 0 8px;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.modal-left .facebook {
+  background: #1877F2; /* Updated to Facebook's official blue */
+  color: #fff;
+  border: none;
+}
+.modal-left .youtube {
+  background: #FF0000; /* Updated to YouTube's official red */
+  color: #fff;
+  border: none;
+}
+.modal-left .x {
+  background: #1DA1F2; /* Updated to X's official blue */
+  color: #fff;
+  border: none;
+}
+.modal-right {
+  flex: 1;
+  background: #003366;
+  color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+.modal-right .cta-button {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 10px;
+  background: var(--cw-yellow);
+  color: #003366;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.modal-right .world-map {
+  width: 120px;
+  margin: 16px auto;
+}
+
+/* Failure State Styling */
+.modal.failure {
+  background: #fff3cd;
+  border: 2px solid #ffc72c;
+}
+.modal.failure .modal-content {
+  flex-direction: column;
+}
+.modal.failure .modal-left {
+  background: none;
+  color: #003366;
+}
+.modal.failure .modal-left h2 {
+  color: #d9534f;
+}
+.modal.failure .modal-right {
+  display: none;
+}
+.modal.failure .cta-button {
+  background: #ffc72c;
+  color: #003366;
+}
+
+/* Responsive styling for the middle section */
+@media (max-width: 768px) {
+  .middle-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  .panel {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .panel.right-panel {
+    text-align: center;
+  }
+  .panel .cta-button {
+    width: 80%;
+    margin: 10px auto;
+  }
+  .panel .world-map {
+    width: 100%;
+    height: auto;
+  }
+  .hud {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .progress-bar {
+    width: 90%;
+    margin: 10px auto;
+  }
+}
+
+/* Footer Styling */
+.footer {
+  background-color: #003366; /* Dark blue background */
+  color: #fff; /* White text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.footer-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.footer-icon {
+  width: 40px;
+  height: auto;
+}
+/* Update footer text font to Proxima Nova */
+.footer-text {
+  font-family: 'Proxima Nova', sans-serif; /* Updated to Proxima Nova */
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Responsive Modal Popup Styling */
+.game-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.modal-content {
+  max-width: 600px;
+  width: 90vw;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: var(--cw-shadow);
+  font-family: 'Proxima Nova', 'Montserrat', sans-serif;
+}
+.modal-left {
+  flex: 1;
+  background: var(--cw-yellow);
+  color: #003366;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+.modal-left h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.modal-left .image-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #e0e0e0;
+  margin: 16px auto;
+  border: 2px solid #003366;
+}
+.modal-left .social-buttons button {
+  margin: 0 8px;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.modal-left .facebook {
+  background: #1877F2; /* Updated to Facebook's official blue */
+  color: #fff;
+  border: none;
+}
+.modal-left .youtube {
+  background: #FF0000; /* Updated to YouTube's official red */
+  color: #fff;
+  border: none;
+}
+.modal-left .x {
+  background: #1DA1F2; /* Updated to X's official blue */
+  color: #fff;
+  border: none;
+}
+.modal-right {
+  flex: 1;
+  background: #003366;
+  color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+.modal-right .cta-button {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 12px 0;
+  background: var(--cw-yellow);
+  color: #003366;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.modal-right .world-map {
+  width: 120px;
+  margin: 16px auto;
+}
+/* Error Modal Styling */
+.game-modal.error .modal-content {
+  background: #FFF3CD;
+  border: 2px solid #FFC72C;
+  text-align: center;
+}
+.game-modal.error h2 {
+  color: #003366;
+}
+.game-modal.error p {
+  color: #003366;
+}
+.game-modal.error .cta-button {
+  background: #FFC72C;
+  color: #003366;
+}
+
+/* Fact Box Styling */
+.fact-box {
+  font-size: 1em;
+  font-weight: bold; /* Make text bold */
+  color: #003366; /* Use dark blue for text */
+  background: #E3F2FD; /* Light blue background */
+  padding: 10px;
+  border-radius: 6px;
+  margin: 10px auto;
+  text-align: center;
+  max-width: 90%;
+}
+.game-modal.error .fact-box {
+  color: #003366; /* Dark text for error */
+  background: #FFF3CD; /* Light yellow for error */
+}
+
+/* Close Button Styling */
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #003366;
+  cursor: pointer;
+}
+.close-button:hover {
+  color: #FFC72C;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #003366;
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #FFC72C;
+  transition: width 0.3s ease;
 }

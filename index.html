@@ -5,14 +5,19 @@
   <meta name="viewport" content="width=600, initial-scale=1.0">
   <title>Clean Water Quest – Playable Prototype</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
   <h1 style="margin-top: 18px; margin-bottom: 2px;">The Clean Water Quest</h1>
+  <!-- HUD Section -->
   <div class="hud">
-    <span>Level: <span id="levelNum">1</span></span>
-    <span>Score: <span id="score">0</span></span>
-    <span class="drops"><img src="assets/river_tiles/river_straight_horizontal.png" alt="water drop" style="width:20px;height:20px;"> <span id="drops">15</span></span>
-    <span>Moves: <span id="moves">0</span></span>
+    <div id="timer">00:00</div>
+    <div id="score">SCORE 0</div>
+    <div id="level">LEVEL 1</div>
+    <div id="turns">TURNS 10</div>
+  </div>
+  <div class="progress-bar">
+    <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
   </div>
   <div class="grid" id="gameGrid"></div>
   <div class="controls">
@@ -25,6 +30,57 @@
     <p><i>Did you know?</i><br>More than 700 million people worldwide lack access to clean water.</p>
     <button onclick="closePopup()">Close</button>
   </div>
+  <!-- Modal Popup Structure -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-left">
+        <h2 id="modal-heading">WELL DONE!</h2>
+        <div class="image-placeholder"></div>
+        <p id="modal-text">A fact about clean water goes here.</p>
+        <div class="social-buttons">
+          <button class="facebook"><i class="fab fa-facebook-f"></i></button>
+          <button class="youtube"><i class="fab fa-youtube"></i></button>
+          <button class="twitter"><i class="fab fa-twitter"></i></button>
+        </div>
+      </div>
+      <div class="modal-right">
+        <button id="modal-button-1" class="cta-button">SUBSCRIBE FOR UPDATES</button>
+        <button id="modal-button-2" class="cta-button">DONATE</button>
+        <img src="img/world_map_outlined.png" alt="World Map" class="world-map">
+      </div>
+    </div>
+  </div>
+  <!-- Responsive Modal Popup System -->
+  <div id="game-modal" class="game-modal">
+    <div class="modal-content">
+      <button class="close-button" onclick="hideModal()">&times;</button>
+      <div class="modal-left">
+        <h2 id="modal-heading">WELL DONE!</h2>
+        <!-- Add fact box to modal structure -->
+        <div id="fact-box" class="fact-box"></div>
+        <div class="image-placeholder"></div>
+        <p id="modal-text">A fact about clean water goes here.</p>
+        <div class="social-buttons">
+          <button class="facebook"><i class="fab fa-facebook-f"></i></button>
+          <button class="youtube"><i class="fab fa-youtube"></i></button>
+          <button class="twitter"><i class="fab fa-twitter"></i></button>
+        </div>
+      </div>
+      <div class="modal-right">
+        <button id="modal-button-1" class="cta-button">SUBSCRIBE FOR UPDATES</button>
+        <button id="modal-button-2" class="cta-button">DONATE</button>
+        <img src="img/world_map_outlined.png" alt="World Map" class="world-map">
+      </div>
+    </div>
+  </div>
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="img/water-can-transparent.png" alt="Water Can" class="footer-icon">
+      <span class="footer-text">Charity: Water</span>
+    </div>
+  </footer>
+  <button id="startButton" onclick="startGame()">Start Game</button>
   <script src="script.js"></script>
 </body>
 </html>
