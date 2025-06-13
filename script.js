@@ -163,7 +163,7 @@ function updateHud() {
   const movesElement = document.getElementById('moves');
   const submitButton = document.getElementById('submitBtn');
   if (scoreElement) scoreElement.textContent = `SCORE ${state.score}`;
-  if (dropsElement) dropsElement.textContent = `DROPS: ${state.drops}`;
+  if (dropsElement) dropsElement.textContent = `💧 ${state.drops}`;
   if (movesElement) movesElement.textContent = `MOVES: ${state.moves}`;
   if (submitButton) submitButton.disabled = (state.drops<=0 || state.solved);
 }
