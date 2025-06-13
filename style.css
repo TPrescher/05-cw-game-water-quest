@@ -56,8 +56,8 @@ body {
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Change to 5 columns */
-  grid-template-rows: repeat(3, 1fr); /* Change to 3 rows */
+  grid-template-columns: repeat(3, 1fr); /* Change to 3 columns */
+  grid-template-rows: repeat(5, 1fr); /* Change to 5 rows */
   gap: 0; /* Ensure tiles are touching */
   justify-content: center;
   align-content: center;
@@ -65,8 +65,8 @@ body {
   background: #e3f2fd;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0,174,239,0.08);
-  width: 500px; /* Adjust width for 5 columns */
-  height: 300px; /* Adjust height for 3 rows */
+  width: 300px; /* Adjust width for 3 columns */
+  height: 500px; /* Adjust height for 5 rows */
   overflow: hidden; /* Prevent extra tiles */
 }
 .tile {
@@ -111,6 +111,7 @@ body {
 .controls {
   display: flex;
   justify-content: center;
+  align-items: center; /* Ensure vertical alignment */
   gap: 20px;
   margin: 20px 0;
   margin-top: 40px;
@@ -226,19 +227,16 @@ button:disabled {
   cursor: pointer;
 }
 .modal-left .facebook {
-  background: #1877F2; /* Updated to Facebook's official blue */
+  background: #3b5998;
   color: #fff;
-  border: none;
 }
 .modal-left .youtube {
-  background: #FF0000; /* Updated to YouTube's official red */
+  background: #ff0000;
   color: #fff;
-  border: none;
 }
-.modal-left .x {
-  background: #1DA1F2; /* Updated to X's official blue */
+.modal-left .twitter {
+  background: #1da1f2;
   color: #fff;
-  border: none;
 }
 .modal-right {
   flex: 1;
@@ -397,19 +395,16 @@ button:disabled {
   cursor: pointer;
 }
 .modal-left .facebook {
-  background: #1877F2; /* Updated to Facebook's official blue */
+  background: #003366;
   color: #fff;
-  border: none;
 }
 .modal-left .youtube {
-  background: #FF0000; /* Updated to YouTube's official red */
+  background: #00AEEF;
   color: #fff;
-  border: none;
 }
-.modal-left .x {
-  background: #1DA1F2; /* Updated to X's official blue */
+.modal-left .twitter {
+  background: #1DA1F2;
   color: #fff;
-  border: none;
 }
 .modal-right {
   flex: 1;
