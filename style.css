@@ -18,10 +18,34 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 20px;
+  padding-top: 72px; /* Prevent content from being hidden under the fixed header */
   background-color: var(--cw-blue-light); /* Set the background to light blue */
   color: #003366; /* Set dark blue for all main text and UI elements */
   position: relative;
   padding-bottom: 100px; /* Adjust for footer height */
+}
+
+/* Header Styling */
+.main-header {
+  position: fixed; /* Make the header stick to the top */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-width: 100vw;
+  background: #000;
+  padding: 24px 0 16px 0;
+  margin: 0;
+  box-sizing: border-box;
+  z-index: 1000; /* Ensure header is above other content */
+}
+.game-title {
+  color: #fff;
+  text-align: center;
+  font-family: 'Montserrat', 'Avenir', sans-serif;
+  font-size: 2.2em;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
 }
 
 /* Modernized HUD Styling */
@@ -37,10 +61,11 @@ body {
   font-size: 1.18em;
   color: #003366;
   border-radius: 18px;
-  box-shadow: 0 4px 18px rgba(0, 174, 239, 0.10);
+  box-shadow: 0 4px 18px rgba(0,174,239,0.10);
   margin: 24px auto 12px auto;
   max-width: 420px;
   gap: 12px;
+  margin-top: 40px; /* Add margin to move HUD down */
 }
 .hud div {
   flex: 1;
@@ -88,11 +113,13 @@ body {
   align-content: center;
   margin: 40px auto;
   background: #e3f2fd;
-  border-radius: 12px;
+  border-radius: 0 !important;
   box-shadow: 0 4px 16px rgba(0,174,239,0.08);
   width: 300px; /* Adjust width for 3 columns */
   height: 500px; /* Adjust height for 5 rows */
   overflow: hidden; /* Prevent extra tiles */
+  border: 4px solid #003366; /* Add dark blue border */
+  box-sizing: border-box;
 }
 #gameGrid {
   display: grid;
@@ -104,14 +131,17 @@ body {
   width: 300px; /* Adjust width for 3 columns */
   height: 500px; /* Adjust height for 5 rows */
   background: #e3f2fd;
-  border-radius: 12px;
+  border-radius: 0 !important;
   box-shadow: 0 4px 16px rgba(0, 174, 239, 0.08);
   overflow: hidden;
+  border: 4px solid #003366; /* Add dark blue border */
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(0, 51, 102, 0.18), 0 1.5px 0 #003366 inset;
+  transform: perspective(600px) rotateX(4deg);
 }
 .tile {
   background: #fff;
-  border: 2px solid #00AEEF;
-  border-radius: 0; /* Remove rounded corners */
+  border: none !important;
   width: 100px;
   height: 100px;
   display: flex;
@@ -159,17 +189,24 @@ body {
 button {
   font-size: 1.1em;
   padding: 10px 20px;
-  border-radius: 8px;
-  background: #2e9df7;
-  color: #fff; /* Ensure button text remains white for contrast */
+  border-radius: 0 !important;
+  background: #000 !important;
+  color: #fff !important;
   border: none;
   margin: 0 12px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   transition: background 0.18s;
 }
+button:hover, .cta-button:hover {
+  background: #005b8e !important;
+  color: #fff !important;
+  transform: scale(1.04);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
 button:disabled {
-  background: #aacde8;
+  background: #444 !important;
+  color: #bbb !important;
   cursor: not-allowed;
 }
 .popup {
@@ -366,7 +403,7 @@ button:disabled {
 
 /* Footer Styling */
 .footer {
-  background-color: #003366; /* Dark blue background */
+  background-color: #000 !important; /* Black background for bold look */
   color: #fff; /* White text */
   display: flex;
   align-items: center;
@@ -509,14 +546,19 @@ button:disabled {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: none;
+  background: transparent !important;
   border: none;
-  font-size: 1.5em;
   color: #003366;
+  font-size: 2em;
   cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  outline: none;
 }
 .close-button:hover {
-  color: #FFC72C;
+  background: transparent !important;
+  color: #005b8e;
+  transform: scale(1.18) rotate(12deg);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
 }
 
 .progress-bar {
@@ -532,4 +574,23 @@ button:disabled {
   height: 100%;
   background: #FFC72C;
   transition: width 0.3s ease;
+}
+
+.cta-button {
+  background: #00AEEF !important;
+  color: #fff !important;
+  border-radius: 0 !important;
+  border: none;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 12px 24px;
+  margin: 8px 0;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.cta-button:disabled {
+  background: #aacde8 !important;
+  color: #fff !important;
+  cursor: not-allowed;
 }
