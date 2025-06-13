@@ -69,6 +69,20 @@ body {
   height: 500px; /* Adjust height for 5 rows */
   overflow: hidden; /* Prevent extra tiles */
 }
+#gameGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-rows: repeat(5, 1fr); /* 5 rows */
+  gap: 0;
+  justify-content: center;
+  align-content: center;
+  width: 300px; /* Adjust width for 3 columns */
+  height: 500px; /* Adjust height for 5 rows */
+  background: #e3f2fd;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 174, 239, 0.08);
+  overflow: hidden;
+}
 .tile {
   background: #fff;
   border: 2px solid #00AEEF;
@@ -360,11 +374,13 @@ button:disabled {
   z-index: 9999;
 }
 .modal-content {
+  display: flex;
   max-width: 600px;
   width: 90vw;
   padding: 24px;
   border-radius: 12px;
-  box-shadow: var(--cw-shadow);
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   font-family: 'Proxima Nova', 'Montserrat', sans-serif;
 }
 .modal-left {
