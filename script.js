@@ -53,12 +53,12 @@ let state = {
   drops: maxDrops,
   score: 0,
   moves: 0,
-  solved: false,
-  turns: 0
+  solved: false
 };
 
 let timerInterval = null;
 let elapsedSeconds = 0;
+let timerStarted = false;
 
 function formatTime(secs) {
   const m = Math.floor(secs / 60).toString().padStart(2, '0');
@@ -89,13 +89,14 @@ function updateTimerDisplay() {
 }
 
 function calculateScore() {
-  // Example: base 1000, minus 5 per second, minus 2 per move, plus 10 per drop left
-  let score = 1000 - (elapsedSeconds * 5) - (state.moves * 2) + (state.drops * 10);
+  // Base 1000, minus 10 per move, minus 5 per drop used, minus 2 per second elapsed
+  let score = 1000 - (state.moves * 10) - ((maxDrops - state.drops) * 5) - (elapsedSeconds * 2);
   if (score < 0) score = 0;
   return score;
 }
 
 function initLevel(level) {
+  timerStarted = false;
   do {
     state.grid = [];
     // Generate fresh initial rotations for each new game
@@ -122,7 +123,6 @@ function initLevel(level) {
 
   state.drops = maxDrops;
   state.moves = 0;
-  state.turns = 0;
   state.solved = false;
   renderGame();
   updateHud();
@@ -171,7 +171,13 @@ function renderGame() {
       if ((y === 0 && x === 0) || (y === gridSize.rows - 1 && x === gridSize.columns - 1)) {
         div.classList.add('fixed');
       } else if (isWater) {
-        div.onclick = () => rotateTile(y, x);
+        div.onclick = (e) => {
+          rotateTile(y, x, 1); // Left click: clockwise
+        };
+        div.oncontextmenu = (e) => {
+          e.preventDefault();
+          rotateTile(y, x, -1); // Right click: counterclockwise
+        };
       }
       if (!isWater) {
         div.classList.add('terrain');
@@ -235,11 +241,15 @@ function getValidPathTiles() {
   return path;
 }
 
-function rotateTile(y, x) {
+function rotateTile(y, x, direction = 1) {
   if (state.drops <= 0 || state.solved) return;
+  if (!timerStarted) {
+    startTimer();
+    timerStarted = true;
+  }
   const tile = state.grid[y][x];
   if (['H','V','C_TR','C_RB','C_BL','C_LT','START','END'].includes(tile.type)) {
-    tile.rot = (tile.rot + 1) % 4;
+    tile.rot = (tile.rot + direction + 4) % 4;
     state.drops--;
     state.moves++;
     renderGame();
@@ -253,10 +263,12 @@ function updateHud() {
   const dropsElement = document.getElementById('drops');
   const movesElement = document.getElementById('moves');
   const submitButton = document.getElementById('submitBtn');
+  state.score = calculateScore();
   if (scoreElement) scoreElement.textContent = `SCORE ${state.score}`;
-  if (dropsElement) dropsElement.textContent = `💧 ${state.drops}`;
+  if (dropsElement) dropsElement.textContent = `${state.drops}`;
   if (movesElement) movesElement.textContent = `MOVES: ${state.moves}`;
-  if (submitButton) submitButton.disabled = (state.drops<=0 || state.solved);
+  // Allow submit if solved, even if drops is 0
+  if (submitButton) submitButton.disabled = (!isPuzzleSolved() && state.drops <= 0) || state.solved;
 }
 
 function updateProgressBarFromAlignment() {
@@ -273,8 +285,18 @@ function updateProgressBarFromAlignment() {
       }
     }
   }
-  const percent = total ? (correct / total) * 100 : 0;
-  document.querySelector('.progress-fill').style.width = `${percent}%`;
+  const percent = total ? Math.round((correct / total) * 100) : 0;
+  const fill = document.getElementById('progress-fill');
+  const text = document.getElementById('progress-text');
+  if (fill) {
+    fill.style.width = `${percent}%`;
+    if (percent === 100) {
+      fill.classList.add('wave');
+    } else {
+      fill.classList.remove('wave');
+    }
+  }
+  if (text) text.textContent = `${percent}%`;
 }
 
 // ---- Tile Connection Map ----
@@ -344,6 +366,7 @@ function checkSolved() {
 
 function submitFlow() {
   console.log('submitFlow called');
+  stopTimer(); // Stop the timer when submitting
   submitPuzzle();
   console.log('submitPuzzle executed'); // Debug log to confirm execution
 }

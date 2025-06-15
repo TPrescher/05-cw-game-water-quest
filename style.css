@@ -27,7 +27,11 @@ body {
 
 /* Header Styling */
 .main-header {
-  position: fixed; /* Make the header stick to the top */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -39,13 +43,33 @@ body {
   z-index: 1000; /* Ensure header is above other content */
 }
 .game-title {
+  flex: 0 1 auto;
+  margin: 0 auto;
   color: #fff;
   text-align: center;
   font-family: 'Montserrat', 'Avenir', sans-serif;
   font-size: 2.2em;
   font-weight: 800;
   letter-spacing: 1px;
-  margin: 0;
+}
+.cw-header-logo {
+  margin-left: auto;
+  margin-right: 32px;
+}
+.header-watercan {
+  height: 44px;
+  margin-right: 18px;
+  margin-left: 32px;
+  object-fit: contain;
+  background: transparent;
+}
+.header-watercan-left {
+  margin-left: 32px;
+  margin-right: 18px;
+}
+.header-watercan-right {
+  margin-right: 32px;
+  margin-left: 18px;
 }
 
 /* Modernized HUD Styling */
@@ -403,8 +427,8 @@ button:disabled {
 
 /* Footer Styling */
 .footer {
-  background-color: #000 !important; /* Black background for bold look */
-  color: #fff; /* White text */
+  background-color: #fff !important; /* White background for footer */
+  color: #003366;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,6 +436,7 @@ button:disabled {
   position: absolute;
   bottom: 0;
   width: 100%;
+  border-top: 2px solid #FFC72C;
 }
 .footer-content {
   display: flex;
@@ -432,15 +457,19 @@ button:disabled {
 /* Responsive Modal Popup Styling */
 .game-modal {
   display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 220px; /* Just below HUD and progress bar */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
   background: rgba(0, 0, 0, 0.5);
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 9999;
+}
+.game-modal .modal-content {
+  margin: 0 auto;
 }
 .modal-content {
   display: flex;
@@ -548,7 +577,7 @@ button:disabled {
   right: 16px;
   background: transparent !important;
   border: none;
-  color: #003366;
+  color: #000 !important;
   font-size: 2em;
   cursor: pointer;
   transition: transform 0.18s, box-shadow 0.18s;
@@ -556,7 +585,26 @@ button:disabled {
 }
 .close-button:hover {
   background: transparent !important;
-  color: #005b8e;
+  color: #222 !important;
+  transform: scale(1.18) rotate(12deg);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+.game-modal .close-button {
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  background: transparent !important;
+  border: none;
+  color: #000 !important;
+  font-size: 2em;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  outline: none;
+  z-index: 10001;
+}
+.game-modal .close-button:hover {
+  color: #222 !important;
   transform: scale(1.18) rotate(12deg);
   box-shadow: 0 2px 12px rgba(0,0,0,0.10);
 }
@@ -575,7 +623,25 @@ button:disabled {
   background: #FFC72C;
   transition: width 0.3s ease;
 }
-
+.progress-fill.wave {
+  background: linear-gradient(90deg, #FFC72C 80%, #ffe066 100%);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill.wave::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml;utf8,<svg width="60" height="28" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 14 Q 15 0 30 14 T 60 14 V28 H0Z" fill="%23fff" fill-opacity="0.3"/></svg>');
+  background-size: 60px 28px;
+  background-repeat: repeat-x;
+  animation: wave-move 1.2s linear infinite;
+  pointer-events: none;
+}
+@keyframes wave-move {
+  0% { background-position-x: 0; }
+  100% { background-position-x: 60px; }
+}
 .cta-button {
   background: #00AEEF !important;
   color: #fff !important;
@@ -597,4 +663,91 @@ button:disabled {
 .tile-glow {
   box-shadow: 0 0 16px 6px #00AEEF88, 0 0 0 2px #fff;
   z-index: 2;
+}
+
+/* Modernized Progress Bar Styling */
+.modern-progress {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 520px;
+  height: 36px;
+  background: #003366;
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  margin: 24px auto 24px auto;
+  overflow: hidden;
+}
+.progress-icon {
+  position: static;
+  margin-left: 0;
+  margin-right: 12px;
+  width: 32px;
+  height: 32px;
+  z-index: 2;
+}
+.progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #003366;
+  font-weight: 700;
+  font-size: 1.2em;
+  z-index: 3;
+  pointer-events: none;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFC72C 80%, #ffe066 100%);
+  border-radius: 0;
+  transition: width 0.4s cubic-bezier(.4,1.4,.6,1);
+  z-index: 1;
+}
+
+/* Modern Card-like HUD Styling */
+.hud-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0,174,239,0.10);
+  padding: 16px 32px;
+  margin: 24px auto 12px auto;
+  max-width: 520px;
+  gap: 40px; /* Increased gap for better spacing */
+}
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px; /* Slightly wider for balance */
+}
+.hud-icon {
+  font-size: 1.5em;
+  margin-bottom: 6px;
+}
+#drops, .hud-item .fa-tint {
+  color: #FFC72C;
+  font-weight: bold;
+}
+#timer, .hud-item .fa-clock {
+  color: #003366;
+}
+#score, .hud-item .fa-star {
+  color: #003366;
+}
+#level, .hud-item .fa-flag {
+  color: #003366;
+}
+@media (max-width: 600px) {
+  .hud-card {
+    flex-direction: column;
+    gap: 14px;
+    padding: 12px 8px;
+  }
+  .hud-item {
+    min-width: 0;
+  }
 }
