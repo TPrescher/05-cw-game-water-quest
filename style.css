@@ -594,3 +594,7 @@ button:disabled {
   color: #fff !important;
   cursor: not-allowed;
 }
+.tile-glow {
+  box-shadow: 0 0 16px 6px #00AEEF88, 0 0 0 2px #fff;
+  z-index: 2;
+}

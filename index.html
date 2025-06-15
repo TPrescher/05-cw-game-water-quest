@@ -29,19 +29,15 @@
     <button id="startButton" onclick="startGame()">Start Game</button>
     <button id="submitBtn" onclick="submitFlow()">Submit Flow</button>
   </div>
-  <div class="popup" id="winPopup">
-    <h2>WELL DONE!</h2>
-    <p>You brought clean water to the village!<br><span class="score">+100</span></p>
-    <p><i>Did you know?</i><br>More than 700 million people worldwide lack access to clean water.</p>
-    <button onclick="closePopup()">Close</button>
-  </div>
-  <!-- Modal Popup Structure -->
-  <div id="modal" class="modal">
+  <!-- Responsive Modal Popup System -->
+  <div id="game-modal" class="game-modal">
     <div class="modal-content">
+      <button class="close-button" onclick="hideModal()">&times;</button>
       <div class="modal-left">
         <h2 id="modal-heading">WELL DONE!</h2>
-        <div class="image-placeholder"></div>
-        <p id="modal-text">A fact about clean water goes here.</p>
+        <!-- Add fact box to modal structure -->
+        <div id="fact-box" class="fact-box"></div>
+        <div class="image-placeholder"><img src="img/water-can.png" alt="Water Can" class="popup-watercan"></div>
         <div class="social-buttons">
           <button class="facebook"><i class="fab fa-facebook-f"></i></button>
           <button class="youtube"><i class="fab fa-youtube"></i></button>
@@ -55,27 +51,11 @@
       </div>
     </div>
   </div>
-  <!-- Responsive Modal Popup System -->
-  <div id="game-modal" class="game-modal">
+  <!-- Result Popup Modal -->
+  <div id="popupModal" class="modal">
     <div class="modal-content">
-      <button class="close-button" onclick="hideModal()">&times;</button>
-      <div class="modal-left">
-        <h2 id="modal-heading">WELL DONE!</h2>
-        <!-- Add fact box to modal structure -->
-        <div id="fact-box" class="fact-box"></div>
-        <div class="image-placeholder"><img src="img/water-can.png" alt="Water Can" class="popup-watercan"></div>
-        <p id="modal-text">A fact about clean water goes here.</p>
-        <div class="social-buttons">
-          <button class="facebook"><i class="fab fa-facebook-f"></i></button>
-          <button class="youtube"><i class="fab fa-youtube"></i></button>
-          <button class="twitter"><i class="fab fa-twitter"></i></button>
-        </div>
-      </div>
-      <div class="modal-right">
-        <button id="modal-button-1" class="cta-button">SUBSCRIBE FOR UPDATES</button>
-        <button id="modal-button-2" class="cta-button">DONATE</button>
-        <img src="img/world_map_outlined.png" alt="World Map" class="world-map">
-      </div>
+      <p id="modalMessage"></p>
+      <button onclick="closePopup()">Close</button>
     </div>
   </div>
   <!-- Footer Section -->
