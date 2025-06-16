@@ -255,6 +255,11 @@ function rotateTile(y, x, direction = 1) {
     renderGame();
     updateHud();
     updateProgressBarFromAlignment();
+    // If player runs out of moves and puzzle is not solved, show TRY AGAIN pop-up
+    if (state.drops === 0 && !isPuzzleSolved()) {
+      stopTimer();
+      showModal(false, 'TRY AGAIN!');
+    }
   }
 }
 
@@ -367,6 +372,12 @@ function checkSolved() {
 function submitFlow() {
   console.log('submitFlow called');
   stopTimer(); // Stop the timer when submitting
+  // If out of moves and not solved, force TRY AGAIN popup
+  if (state.drops <= 0 && !isPuzzleSolved()) {
+    showModal(false, 'TRY AGAIN!');
+    console.log('submitPuzzle executed (out of moves, not solved)');
+    return;
+  }
   submitPuzzle();
   console.log('submitPuzzle executed'); // Debug log to confirm execution
 }
