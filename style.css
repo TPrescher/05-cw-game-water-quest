@@ -10,8 +10,10 @@
 }
 
 /* Fonts */
+body, html {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
 body {
-  font-family: Avenir, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -442,6 +444,10 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-content: space-between;
+}
+.cw-footer-logo {
+  margin-right: auto;
 }
 .footer-icon {
   width: 40px;
@@ -452,6 +458,35 @@ button:disabled {
   font-family: 'Proxima Nova', sans-serif; /* Updated to Proxima Nova */
   font-size: 1.2em;
   font-weight: bold;
+}
+.footer-btn {
+  display: inline-block;
+  margin-left: 18px;
+  padding: 10px 22px;
+  background: #FFC72C;
+  color: #003366;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1em;
+  transition: background 0.18s, color 0.18s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+}
+.footer-btn:hover, .footer-btn:focus {
+  background: #003366;
+  color: #FFC72C;
+  text-decoration: none;
+}
+.donate-btn {
+  background: #00AEEF;
+  color: #fff;
+  margin-left: 10px;
+}
+.donate-btn:hover, .donate-btn:focus {
+  background: #FFC72C;
+  color: #003366;
 }
 
 /* Responsive Modal Popup Styling */

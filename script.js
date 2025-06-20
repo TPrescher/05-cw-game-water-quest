@@ -263,16 +263,21 @@ function rotateTile(y, x, direction = 1) {
   }
 }
 
+const WATER_TILES = ['H','V','C_TR','C_RB','C_BL','C_LT','START','END'];
+
+// DRY: HUD update with a loop
 function updateHud() {
-  const scoreElement = document.getElementById('score');
-  const dropsElement = document.getElementById('drops');
-  const movesElement = document.getElementById('moves');
+  const hudMap = {
+    score: `SCORE ${state.score}`,
+    drops: state.drops,
+    level: `LEVEL ${state.level || 1}`,
+    timer: `TIMER ${formatTime(elapsedSeconds)}`
+  };
+  Object.entries(hudMap).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  });
   const submitButton = document.getElementById('submitBtn');
-  state.score = calculateScore();
-  if (scoreElement) scoreElement.textContent = `SCORE ${state.score}`;
-  if (dropsElement) dropsElement.textContent = `${state.drops}`;
-  if (movesElement) movesElement.textContent = `MOVES: ${state.moves}`;
-  // Allow submit if solved, even if drops is 0
   if (submitButton) submitButton.disabled = (!isPuzzleSolved() && state.drops <= 0) || state.solved;
 }
 
