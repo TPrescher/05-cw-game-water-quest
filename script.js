@@ -3,26 +3,26 @@ const gridSize = { rows: 5, columns: 3 }; // Define grid size
 
 // ---- Tile Asset Map ----
 const TILE_ASSETS = {
-  START:         'img/pipe_start_faucet_box_1.png',
-  END:           'img/village_house_end_box_15.png',
-  C_TR:          'img/pipe_curve_top_box_4.png',
-  C_RB:          'img/pipe_curve_right_box_5.png',
-  C_BL:          'img/pipe_curve_right_box_14.png', // Using this for box 14 as requested
-  C_LT:          'img/pipe_curve_right_box_14.png', // Also map C_LT to the same image for testing
-  V:             'img/pipe_verticle_ box_8.png', // Note: filename has a typo, should be 'vertical'
-  H:             'img/pipe_straight_horizontal.png', // No new file found, keeping old name
-  BLOCKED_1:     'img/terrain_grass_deadend_box_7.png',
-  BLOCKED_2:     'img/terrain_mountain_peaks_box_6.png',
-  BLOCKED_3:     'img/terrain_mountain_peaks_box_9.png',
-  BLOCKED_4:     'img/terrain_mountain_peaks_box_10.png',
-  T_FOREST:      'img/terrain_woodland_small_box_3.png',
-  T_DESERT_1:    'img/terrain_desert_open_box_2.png',
-  T_DESERT_2:    'img/terrain_desert_open_box_13.png',
-  T_DESERT_3:    'img/terrain_desert_open_box_12.png',
-  T_GRASS:       'img/terrain_grass_deadend_box_7.png',
-  T_DESERT:      'img/terrain_desert_open_box_2.png',
-  T_MOUNTAIN_1:  'img/terrain_mountain_peaks_box_6.png',
-  T_MOUNTAIN_2:  'img/terrain_mountain_peaks_box_9.png'
+  START:         'img/lvl_1_box_1.png',
+  END:           'img/lvl_1_box_15.png',
+  C_TR:          'img/lvl_1_box_4_water.png',
+  C_RB:          'img/lvl_1_box_5_water.png',
+  C_BL:          'img/lvl_1_box_14_water.png',
+  C_LT:          'img/lvl_1_box_14_water.png',
+  V:             'img/lvl_1_box_8_water.png',
+  H:             'img/lvl_1_box_9.png',
+  BLOCKED_1:     'img/lvl_1_box_7.png',
+  BLOCKED_2:     'img/lvl_1_box_6.png',
+  BLOCKED_3:     'img/lvl_1_box_10.png',
+  BLOCKED_4:     'img/lvl_1_box_11_water.png',
+  T_FOREST:      'img/lvl_1_box_3.png',
+  T_DESERT_1:    'img/lvl_1_box_2.png',
+  T_DESERT_2:    'img/lvl_1_box_13.png',
+  T_DESERT_3:    'img/lvl_1_box_12.png',
+  T_GRASS:       'img/lvl_1_box_7.png',
+  T_DESERT:      'img/lvl_1_box_2.png',
+  T_MOUNTAIN_1:  'img/lvl_1_box_6.png',
+  T_MOUNTAIN_2:  'img/lvl_1_box_10.png'
 };
 
 // ---- Solution Grid ----
@@ -153,10 +153,6 @@ function renderGame() {
       const inPath = pathTiles.some(pt => pt.y === y && pt.x === x);
       const isWater = ['H','V','C_TR','C_RB','C_BL','C_LT','START','END'].includes(tile.type);
       const matchesSolution = tile.type === SOLUTION_GRID[y][x] && tile.rot === SOLUTION_ROTATIONS[y][x];
-      // Extra debug for boxes 5, 8, 11, 14
-      if ((y === 1 && x === 1) || (y === 2 && x === 1) || (y === 3 && x === 1) || (y === 4 && x === 1)) {
-        console.log(`[DEBUG] Box at [${y+1},${x+1}] | inPath: ${inPath} | type: ${tile.type}, rot: ${tile.rot} | solution: ${SOLUTION_GRID[y][x]}, rot: ${SOLUTION_ROTATIONS[y][x]} | matches: ${matchesSolution}`);
-      }
       // Add glow if this tile is part of the valid path, matches solution, and is not box 1 (START)
       if (
         !(y === 0 && x === 0) &&
@@ -165,7 +161,6 @@ function renderGame() {
         matchesSolution
       ) {
         div.classList.add('tile-glow');
-        console.log(`GLOW: [${y+1},${x+1}]`);
       }
       // Make box 1 (START) and box 15 (END) static (not rotatable)
       if ((y === 0 && x === 0) || (y === gridSize.rows - 1 && x === gridSize.columns - 1)) {
@@ -182,18 +177,20 @@ function renderGame() {
       if (!isWater) {
         div.classList.add('terrain');
       }
+      // Use box number to select the image
+      const boxNumber = y * gridSize.columns + x + 1;
+      let imgName = `img/lvl_1_box_${boxNumber}`;
+      // Prefer water version if it exists for water tiles
+      if (isWater && [4,5,8,11,14].includes(boxNumber)) {
+        imgName += '_water';
+      }
+      imgName += '.png';
       const img = document.createElement('img');
-      img.src = TILE_ASSETS[tile.type] || 'img/terrain_grass_deadend.png';
+      img.src = imgName;
       img.alt = tile.type;
       img.style.transform = `rotate(${tile.rot * 90}deg)`;
       div.appendChild(img);
       gameGrid.appendChild(div);
-
-      // Debug output for box 14 image
-      if (y === 4 && x === 1) {
-        console.log(`[DEBUG] Box 14 img.src: ${img.src} | tile.type: ${tile.type} | TILE_ASSETS[tile.type]: ${TILE_ASSETS[tile.type]}`);
-      }
-      console.log(`[DEBUG] Tile at [${y+1},${x+1}] | img.src: ${img.src} | tile.type: ${tile.type} | TILE_ASSETS[tile.type]: ${TILE_ASSETS[tile.type]}`);
     }
   }
 }
