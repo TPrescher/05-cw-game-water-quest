@@ -17,34 +17,38 @@
     <h1 class="game-title">The Clean Water Quest</h1>
     <img src="img/water-can-transparent.png" alt="Water Can" class="header-watercan header-watercan-right">
   </header>
-  <!-- HUD Section -->
-  <div class="hud hud-card">
-    <div class="hud-item">
-      <span class="hud-icon"><i class="fas fa-flag"></i></span>
-      <div id="level">LEVEL 1</div>
-    </div>
-    <div class="hud-item">
-      <span class="hud-icon"><i class="fas fa-tint"></i></span>
-      <div id="drops"> 15</div>
-    </div>
-    <div class="hud-item">
-      <span class="hud-icon"><i class="fas fa-star"></i></span>
-      <div id="score">SCORE 0</div>
-    </div>
-    <div class="hud-item">
-      <span class="hud-icon"><i class="fas fa-clock"></i></span>
-      <div id="timer">TIMER 00:00</div>
+  <!-- Minimalist Status HUD Row -->
+  <div class="status-hud">
+    <span id="status-timer"><i class="fas fa-clock"></i> <span id="hud-timer">00:00</span></span>
+    <span id="status-drops"><i class="fas fa-tint"></i> <span id="hud-drops">0</span></span>
+    <span id="status-score"><i class="fas fa-star"></i> <span id="hud-score">0</span></span>
+    <button id="settingsBtn" class="settings-btn" title="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>
+    <div id="settingsDropdown" class="settings-dropdown" style="display:none;">
+      <div class="settings-dropdown-title">Difficulty</div>
+      <button class="settings-dropdown-item" data-difficulty="easy">Easy</button>
+      <button class="settings-dropdown-item" data-difficulty="medium">Medium</button>
+      <button class="settings-dropdown-item" data-difficulty="hard">Hard</button>
     </div>
   </div>
-  <div class="progress-bar modern-progress">
-    <img src="img/water-can.png" alt="Water Can" class="progress-icon">
-    <div class="progress-text" id="progress-text">0%</div>
-    <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+  <!-- Water Progress HUD (now unified, no Help More button) -->
+  <div class="water-progress-hud">
+    <div class="wp-hud-main">
+      <div class="wp-hud-circle">
+        <img src="img/water-can-transparent.png" alt="Water Can" class="wp-hud-watercan">
+        <span class="wp-hud-percent" id="wpPercent">0%</span>
+      </div>
+      <div class="wp-hud-bar-wrap">
+        <div class="wp-hud-bar-bg">
+          <div class="wp-hud-bar-fill" id="wpBarFill" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="wp-hud-success" id="wpSuccessMsg" style="display:none;">Clean Water Secured!</div>
   </div>
+  <!-- End Water Progress HUD -->
   <div class="grid" id="gameGrid"></div>
   <div class="controls">
     <button onclick="restartGame()">Restart</button>
-    <button id="startButton" onclick="startGame()">Start Game</button>
     <button id="submitBtn" onclick="submitFlow()">Submit Flow</button>
   </div>
   <!-- Responsive Modal Popup System -->

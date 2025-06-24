@@ -1,4 +1,11 @@
-const maxDrops = 15; // Set the maximum number of drops
+const DIFFICULTY_SETTINGS = {
+  easy: 20,
+  medium: 15,
+  hard: 10
+};
+let currentDifficulty = 'easy'; // Default
+let maxDrops = DIFFICULTY_SETTINGS[currentDifficulty];
+
 const gridSize = { rows: 5, columns: 3 }; // Define grid size
 
 // ---- Tile Asset Map ----
@@ -104,14 +111,14 @@ function initLevel(level) {
     for (let y = 0; y < gridSize.rows; y++) {
       INITIAL_ROTATIONS[y] = [];
       for (let x = 0; x < gridSize.columns; x++) {
-        INITIAL_ROTATIONS[y][x] = (['H','V','C_TR','C_RB','C_BL','C_LT'].includes(level[y][x])) ? Math.floor(Math.random() * 4) : 0;
+        INITIAL_ROTATIONS[y][x] = (["H","V","C_TR","C_RB","C_BL","C_LT"].includes(level[y][x])) ? Math.floor(Math.random() * 4) : 0;
       }
     }
     for (let y = 0; y < gridSize.rows; y++) {
       state.grid[y] = [];
       for (let x = 0; x < gridSize.columns; x++) {
         const type = level[y][x];
-        const isWater = ['H','V','C_TR','C_RB','C_BL','C_LT','START','END'].includes(type);
+        const isWater = ["H","V","C_TR","C_RB","C_BL","C_LT","START","END"].includes(type);
         let initialRot = 0;
         if (isWater && type !== 'START' && type !== 'END') {
           initialRot = INITIAL_ROTATIONS[y][x]; // Use randomized initial rotations
@@ -124,10 +131,10 @@ function initLevel(level) {
   state.drops = maxDrops;
   state.moves = 0;
   state.solved = false;
+  state.score = calculateScore(); // Reset score at start
   renderGame();
   updateHud();
   hideModal();
-  updateProgressBarFromAlignment();
 
   console.log('State grid after initialization:', state.grid);
 }
@@ -245,13 +252,14 @@ function rotateTile(y, x, direction = 1) {
     timerStarted = true;
   }
   const tile = state.grid[y][x];
-  if (['H','V','C_TR','C_RB','C_BL','C_LT','START','END'].includes(tile.type)) {
+  if (["H","V","C_TR","C_RB","C_BL","C_LT","START","END"].includes(tile.type)) {
     tile.rot = (tile.rot + direction + 4) % 4;
     state.drops--;
     state.moves++;
+    state.score = calculateScore(); // Update score after move
     renderGame();
     updateHud();
-    updateProgressBarFromAlignment();
+    // updateProgressBarFromAlignment(); // <-- REMOVE THIS LINE
     // If player runs out of moves and puzzle is not solved, show TRY AGAIN pop-up
     if (state.drops === 0 && !isPuzzleSolved()) {
       stopTimer();
@@ -262,23 +270,15 @@ function rotateTile(y, x, direction = 1) {
 
 const WATER_TILES = ['H','V','C_TR','C_RB','C_BL','C_LT','START','END'];
 
-// DRY: HUD update with a loop
-function updateHud() {
-  const hudMap = {
-    score: `SCORE ${state.score}`,
-    drops: state.drops,
-    level: `LEVEL ${state.level || 1}`,
-    timer: `TIMER ${formatTime(elapsedSeconds)}`
-  };
-  Object.entries(hudMap).forEach(([id, value]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-  });
-  const submitButton = document.getElementById('submitBtn');
-  if (submitButton) submitButton.disabled = (!isPuzzleSolved() && state.drops <= 0) || state.solved;
-}
-
-function updateProgressBarFromAlignment() {
+// --- Unified HUD Logic ---
+function updateUnifiedHUD() {
+  // Timer
+  document.getElementById('hud-timer').textContent = formatTime(elapsedSeconds);
+  // Drops
+  document.getElementById('hud-drops').textContent = state.drops;
+  // Score
+  document.getElementById('hud-score').textContent = state.score;
+  // Progress bar (percent of water tiles correctly aligned)
   const waterTypes = ['H','V','C_TR','C_RB','C_BL','C_LT','START','END'];
   let total = 0, correct = 0;
   for (let y = 0; y < gridSize.rows; y++) {
@@ -293,18 +293,29 @@ function updateProgressBarFromAlignment() {
     }
   }
   const percent = total ? Math.round((correct / total) * 100) : 0;
-  const fill = document.getElementById('progress-fill');
-  const text = document.getElementById('progress-text');
-  if (fill) {
-    fill.style.width = `${percent}%`;
-    if (percent === 100) {
-      fill.classList.add('wave');
-    } else {
-      fill.classList.remove('wave');
-    }
+  document.getElementById('wpPercent').textContent = percent + '%';
+  document.getElementById('wpBarFill').style.width = percent + '%';
+  if (percent >= 100) {
+    document.getElementById('wpSuccessMsg').style.display = 'block';
+    document.querySelector('.wp-hud-circle').style.boxShadow = '0 0 24px 8px #FFD700cc, 0 0 12px #00AEEF88';
+  } else {
+    document.getElementById('wpSuccessMsg').style.display = 'none';
+    document.querySelector('.wp-hud-circle').style.boxShadow = '0 2px 10px rgba(0,174,239,0.10)';
   }
-  if (text) text.textContent = `${percent}%`;
 }
+
+// Patch all game update points to call updateUnifiedHUD
+function updateHud() {
+  state.score = calculateScore();
+  updateUnifiedHUD();
+  const submitButton = document.getElementById('submitBtn');
+  if (submitButton) submitButton.disabled = (!isPuzzleSolved() && state.drops <= 0) || state.solved;
+}
+function updateTimerDisplay() {
+  updateUnifiedHUD();
+}
+
+// Remove Help More button logic and milestone logic
 
 // ---- Tile Connection Map ----
 const TILE_CONNECTIONS = {
@@ -434,13 +445,51 @@ function hideModal() {
 }
 
 // ---- Event Listeners ----
-window.onload = () => {
+window.addEventListener('DOMContentLoaded', () => {
   initLevel(LEVEL_1);
   updateTimerDisplay();
   // Attach event listeners
   const startBtn = document.getElementById('startButton');
   const submitBtn = document.getElementById('submitBtn');
   const restartBtn = document.querySelector('button[onclick="restartGame()"]');
+  // Settings dropdown logic
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsDropdown = document.getElementById('settingsDropdown');
+  if (settingsBtn && settingsDropdown) {
+    // Position dropdown absolutely relative to the cog
+    settingsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Toggle dropdown
+      if (settingsDropdown.style.display === 'block') {
+        settingsDropdown.style.display = 'none';
+      } else {
+        // Position dropdown below the cog
+        const rect = settingsBtn.getBoundingClientRect();
+        settingsDropdown.style.position = 'absolute';
+        settingsDropdown.style.top = (settingsBtn.offsetTop + settingsBtn.offsetHeight + 4) + 'px';
+        settingsDropdown.style.right = '18px';
+        settingsDropdown.style.display = 'block';
+        // Highlight current difficulty
+        document.querySelectorAll('.settings-dropdown-item').forEach(btn => {
+          btn.classList.toggle('selected', btn.dataset.difficulty === currentDifficulty);
+        });
+      }
+    });
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!settingsDropdown.contains(e.target) && e.target !== settingsBtn) {
+        settingsDropdown.style.display = 'none';
+      }
+    });
+    // Handle difficulty selection
+    settingsDropdown.querySelectorAll('.settings-dropdown-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        setDifficulty(btn.dataset.difficulty);
+        settingsDropdown.style.display = 'none';
+        e.stopPropagation();
+      });
+    });
+  }
   if (startBtn) {
     startBtn.onclick = () => {
       initLevel(LEVEL_1);
@@ -461,13 +510,22 @@ window.onload = () => {
   // Modal close button
   const closeBtns = document.querySelectorAll('.close-button');
   closeBtns.forEach(btn => btn.onclick = hideModal);
-};
+
+  // Removed difficulty button listeners for easyBtn, mediumBtn, hardBtn
+});
 
 // Expose for HTML inline handlers (if any remain)
 window.restartGame = () => { initLevel(LEVEL_1); startTimer(); };
 window.hideModal = hideModal;
 window.startGame = () => { initLevel(LEVEL_1); startTimer(); };
 window.submitFlow = submitFlow;
+
+function setDifficulty(level) {
+  currentDifficulty = level;
+  maxDrops = DIFFICULTY_SETTINGS[level];
+  initLevel(LEVEL_1);
+  updateHud();
+}
 
 // ---- Shuffle and Randomize Logic ----
 function shuffleLevel(level) {
